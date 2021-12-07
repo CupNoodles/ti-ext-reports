@@ -179,6 +179,15 @@ class Builder extends \Admin\Classes\AdminController
             $writer->insertOne($csv_headings);
             $writer->insertAll(new \ArrayIterator($data->toArray()));
             
+
+            header('Content-Encoding: UTF-8');
+            header('Content-Type: application/csv; charset=UTF-8');
+            header('Content-Disposition: attachment; filename='.str_replace(' ', '_', $model->title).'.csv');
+            header('Pragma: no-cache');
+
+            $writer->setOutputBOM(Writer::BOM_UTF8);
+            $writer->addStreamFilter('convert.iconv.ISO-8859-15/UTF-8');
+
             echo $writer->getContent();
             exit();
         
