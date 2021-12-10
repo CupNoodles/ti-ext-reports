@@ -21,6 +21,8 @@ class ReportsTable extends \Admin\FormWidgets\DataTable
         $table = $klass->newQuery();
         $query = $parser->parse(json_encode($model->builderjson['rules']), $table);
         
+        $query->select('orders.*');
+        
         $this->fireSystemEvent('thoughtco.reports.extendQuery', [$query, $model->builderjson['model']] );
         
         if (strlen($search)) {

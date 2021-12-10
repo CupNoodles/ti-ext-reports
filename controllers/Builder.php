@@ -102,6 +102,7 @@ class Builder extends \Admin\Classes\AdminController
                 })->pluck('menu_id');
                                
                 $query->join('order_menus', 'order_menus.order_id', '=', 'orders.order_id');
+                $query->select('order_menus.*');
                 return $query->where(function($query) use ($operator, $value) {
                     foreach ($value as $val)
                         $query->orWhere('order_menus.menu_id', $operator, $val);
@@ -127,6 +128,7 @@ class Builder extends \Admin\Classes\AdminController
             
             if ($field == 'orders.menus') {
                 $query->join('order_menus', 'order_menus.order_id', '=', 'orders.order_id');
+                $query->select('order_menus.*');
                 return $query->where('order_menus.menu_id', $operator, $value, $condition);
             }
             
@@ -142,7 +144,7 @@ class Builder extends \Admin\Classes\AdminController
             if (!in_array($modelName, ['\Admin\Models\Orders_model', '\Admin\Models\Customers_model']))
                 return;
                 
-            $query->selectRaw('*, CONCAT(first_name, " ", last_name) as customer_name');
+            $query->selectRaw('CONCAT(first_name, " ", last_name) as customer_name');
             
             if ($modelName == '\Admin\Models\Customers_model') {
                 
